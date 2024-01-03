@@ -12,6 +12,8 @@ public class PlayerBehavior : MonoBehaviour
 
     private Vector3 maxWantedVelocityX;
     private Vector3 maxWantedVelocityY;
+    private Vector3 flightDirection;
+    private Vector3 bulletSpawnLocation;
 
 
     // Start is called before the first frame update
@@ -72,8 +74,19 @@ public class PlayerBehavior : MonoBehaviour
         {
             Vector3 trueMousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 49.0f);
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(trueMousePosition);
-            GameObject bulletInstance = Instantiate(bullet, transform.position, bullet.transform.rotation);
-            bulletInstance.GetComponent<BulletBehavior>().Setup(mousePosition, transform.position);
+
+            // Calculating the flight direction of the bullet before instantiating it
+            flightDirection = (mousePosition - transform.position).normalized;
+            
+            // Calculating the creation position of the bullet
+            bulletSpawnLocation = transform.position + (flightDirection * 2);
+
+            // Making sure it flies in the right direction, need to figure out how to use global coords for this to not be like this
+            flightDirection = new Vector3(flightDirection.x, 0, -flightDirection.y);
+
+            // Instantiate the bullet and feed it its flight direction
+            GameObject bulletInstance = Instantiate(bullet, bulletSpawnLocation, bullet.transform.rotation);
+            bulletInstance.GetComponent<GoodBulletBehavior>().Setup(flightDirection);
         }
     }
 

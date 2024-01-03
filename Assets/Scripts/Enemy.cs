@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int health = 100;
-    [SerializeField] private float movementSpeed = 30.0f;
+    [SerializeField] protected float movementSpeed = 30.0f;
     protected GameObject player;
     private Vector3 movementDirection;
 
@@ -16,8 +16,11 @@ public class Enemy : MonoBehaviour
 
     protected virtual void MoveEnemy()
     {
-        Debug.Log(player.transform.position);
-        movementDirection = (player.transform.position - transform.position).normalized;
-        transform.Translate(movementDirection * Time.deltaTime * movementSpeed);
+        if (player != null)
+        {
+            movementDirection = (player.transform.position - transform.position).normalized;
+            transform.Translate(movementDirection * Time.deltaTime * movementSpeed);
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Bumper : Enemy
 {
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +15,14 @@ public class Bumper : Enemy
     void FixedUpdate()
     {
         MoveEnemy();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("player"))
+        {
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
     }
 }
